@@ -34,8 +34,9 @@ public class Purchase implements Serializable {
     /**
      * Идентификатор сотрудника
      */
-    @Column(name = "employeeId", nullable = false)
-    Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 
     /**
      * Идентификатор магазина
