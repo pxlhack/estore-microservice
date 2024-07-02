@@ -31,6 +31,6 @@ public class ElectroShop {
     /**
      * Оставшееся количество
      */
-    @Column(name = "count_", nullable = false)
+    @Column(name = "count", nullable = false)
     int count;
 }
