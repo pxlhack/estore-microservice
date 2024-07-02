@@ -28,6 +28,6 @@ public class Shop {
     /**
      * Адрес магазина
      */
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String address;
 }
