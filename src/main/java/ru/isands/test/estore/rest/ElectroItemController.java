@@ -1,12 +1,19 @@
 package ru.isands.test.estore.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.isands.test.estore.dto.CreateElectroItemDTO;
+import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.service.ElectroItemService;
+
+import java.util.List;
 
 @RestController
 @Tag(name = "ElectroItem", description = "Сервис для выполнения операций над товарами")
@@ -15,8 +22,17 @@ import ru.isands.test.estore.service.ElectroItemService;
 public class ElectroItemController {
     private final ElectroItemService electroItemService;
 
-    @PostMapping
-    public void create(CreateElectroItemDTO createElectroItemDTO) {
-        electroItemService.create(createElectroItemDTO);
+
+    @GetMapping
+    @Operation(summary = "Получение списка товаров")
+    public ResponseEntity<List<ElectroItemDTO>> getAll() {
+        return ResponseEntity.ok(electroItemService.getAll());
     }
+
+    @PostMapping
+    @Operation(summary = "Создание товара")
+    public ResponseEntity<ElectroItemDTO> create(CreateElectroItemDTO createElectroItemDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(electroItemService.create(createElectroItemDTO));
+    }
+
 }
