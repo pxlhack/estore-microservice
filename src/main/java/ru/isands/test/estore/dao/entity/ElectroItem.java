@@ -20,42 +20,43 @@ public class ElectroItem implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_", unique = true, nullable = false)
-    Long id;
+    @Column(name = "id", unique = true, nullable = false)
+    private Long id;
 
     /**
      * Наименование товара
      */
-    @Column(length = 150, nullable = false)
-    String name;
+    @Column(name = "name", length = 150, nullable = false)
+    private String name;
 
     /**
      * Тип товара
      */
-    @Column(name = "etypeId", nullable = false)
-    Long etypeId;
+    @ManyToOne
+    @JoinColumn(name = "electro_type_id", nullable = false)
+    private ElectroType electroType;
 
     /**
      * Цена в рублях
      */
     @Column(name = "price", nullable = false)
-    Long price;
+    private Long price;
 
     /**
      * Количество
      */
     @Column(name = "count", nullable = false)
-    int count;
+    private int count;
 
     /**
      * Признак архивности товара
      */
     @Column(name = "archive", nullable = false)
-    boolean archive;
+    private boolean archive;
 
     /**
      * Описание товара
      */
-    @Column(nullable = false, columnDefinition = "text")
-    String description;
+    @Column(name = "description", nullable = false, columnDefinition = "text")
+    private String description;
 }
