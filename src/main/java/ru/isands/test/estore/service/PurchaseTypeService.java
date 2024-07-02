@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.PurchaseType;
 import ru.isands.test.estore.dao.repo.PurchaseTypeRepository;
+import ru.isands.test.estore.dto.CreatePurchaseTypeDTO;
 import ru.isands.test.estore.dto.PurchaseTypeDTO;
 
 import java.util.List;
@@ -31,9 +32,9 @@ public class PurchaseTypeService {
     }
 
 
-    public PurchaseTypeDTO create(String name) {
+    public PurchaseTypeDTO create(CreatePurchaseTypeDTO createPurchaseTypeDTO) {
         PurchaseType purchaseType = new PurchaseType();
-        purchaseType.setName(name);
+        purchaseType.setName(createPurchaseTypeDTO.getName());
 
         purchaseTypeRepository.save(purchaseType);
 

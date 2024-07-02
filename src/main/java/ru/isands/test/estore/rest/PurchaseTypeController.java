@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.isands.test.estore.dto.CreatePurchaseTypeDTO;
 import ru.isands.test.estore.dto.PurchaseTypeDTO;
 import ru.isands.test.estore.service.PurchaseTypeService;
 
@@ -37,7 +38,7 @@ public class PurchaseTypeController {
 
     @PostMapping
     @Operation(summary = "Создание типа покупки")
-    public ResponseEntity<PurchaseTypeDTO> create(@RequestParam("name") String name) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(purchaseTypeService.create(name));
+    public ResponseEntity<PurchaseTypeDTO> create(@RequestBody CreatePurchaseTypeDTO createPurchaseTypeDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(purchaseTypeService.create(createPurchaseTypeDTO));
     }
 }
