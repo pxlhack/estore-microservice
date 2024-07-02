@@ -20,50 +20,52 @@ public class Employee implements Serializable {
      * Идентификатор сотрудника
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "employee_counter")
-    @TableGenerator(name = "employee_counter",
-            pkColumnName = "name",
-            pkColumnValue = "ru.isands.test.estore.dao.entity.Employee",
-            table = "counter",
-            valueColumnName = "currentid",
-            allocationSize = 2)
-    @Column(name = "id_", unique = true, nullable = false)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private Long id;
 
     /**
      * Фамилия сотрудника
      */
     @Column(name = "lastname", nullable = false, length = 100)
-    String lastName;
+    private String lastName;
 
     /**
      * Имя сотрудника
      */
     @Column(name = "firstname", nullable = false, length = 100)
-    String firstName;
+    private String firstName;
 
     /**
      * Отчество сотрудника
      */
     @Column(name = "patronymic", nullable = false, length = 100)
-    String patronymic;
+    private String patronymic;
 
     /**
      * Дата рождения сотрудника
      */
     @Column(name = "birthDate", nullable = false)
-    Date birthDate;
+    private Date birthDate;
 
     /**
-     * Ссылка на должность сотрудника
+     * Должность сотрудника
      */
-    @Column(name = "positionId", nullable = false)
-    Long positionId;
+    @ManyToOne
+    @JoinColumn(name = "position_id", nullable = false)
+    private PositionType positionType;
+
+    /**
+     * Магазин, где работает сотрудник
+     */
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = false)
+    private Shop shop;
 
     /**
      * Пол сотрудника (true - мужской, false - женский)
      */
     @Column(name = "gender", nullable = false)
-    boolean gender;
+    private boolean gender;
 
 }
