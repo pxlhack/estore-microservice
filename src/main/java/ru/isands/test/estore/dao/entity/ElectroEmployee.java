@@ -16,13 +16,15 @@ public class ElectroEmployee {
      * Идентификатор типа электроники
      */
     @Id
-    @Column(name = "electroTypeId", nullable = false)
-    Long electroTypeId;
+    @ManyToOne
+    @JoinColumn(name = "electro_type_id", nullable = false)
+    private ElectroType electroType;
 
     /**
      * Идентификатор сотрудника
      */
     @Id
-    @Column(name = "employeeId", nullable = false)
-    Long employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 }
