@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: "estoredb"
+      POSTGRES_USER: "estoreuser"
+      POSTGRES_PASSWORD: "pass4estoreuser"
+    ports:
+      - "5452:5432"
+    networks:
+      - postgres_net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  postgres_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
