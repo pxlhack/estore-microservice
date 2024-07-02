@@ -16,9 +16,9 @@ public class ShopService {
     private final ShopRepository shopRepository;
 
     public List<ShopDTO> getAll() {
-        List<Shop> purchaseTypes = shopRepository.findAll();
+        List<Shop> shops = shopRepository.findAll();
 
-        return purchaseTypes.stream()
+        return shops.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
