@@ -2,6 +2,7 @@ package ru.isands.test.estore.dao.entity;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "store_purchase")
 public class Purchase implements Serializable {
@@ -20,16 +22,16 @@ public class Purchase implements Serializable {
      * Идентификатор покупки
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "purchase_counter")
-    @TableGenerator(name = "purchase_counter", pkColumnName = "name", pkColumnValue = "ru.isands.test.estore.dao.entity.Purchase", table = "counter", valueColumnName = "currentid", allocationSize = 1)
-    @Column(name = "id_", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     Long id;
 
     /**
      * Идентификатор товара
      */
-    @Column(name = "electroId", nullable = false)
-    Long electroId;
+    @ManyToOne
+    @JoinColumn(name = "electro_item_id", nullable = false)
+    private ElectroItem electroItem;
 
     /**
      * Идентификатор сотрудника
@@ -57,5 +59,4 @@ public class Purchase implements Serializable {
     @ManyToOne
     @JoinColumn(name = "purchase_type_id", nullable = false)
     private PurchaseType purchaseType;
-
 }
