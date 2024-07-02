@@ -1,12 +1,16 @@
 
 package ru.isands.test.estore.dao.entity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@Entity
+@Table(name = "electro_item")
 public class ElectroItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
