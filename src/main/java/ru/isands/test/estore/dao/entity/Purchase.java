@@ -40,8 +40,9 @@ public class Purchase implements Serializable {
     /**
      * Идентификатор магазина
      */
-    @Column(name = "shopId", nullable = false)
-    Long shopId;
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = false)
+    private Shop shop;
 
     /**
      * Дата совершения покупки
