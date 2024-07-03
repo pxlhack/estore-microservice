@@ -32,7 +32,6 @@ public class ElectroItemService {
         electroItemDTO.setName(electroItem.getName());
         electroItemDTO.setElectroTypeId(electroItem.getElectroType().getId());
         electroItemDTO.setPrice(electroItem.getPrice());
-        electroItemDTO.setCount(electroItem.getCount());
         electroItemDTO.setArchive(electroItem.isArchive());
         electroItemDTO.setDescription(electroItem.getDescription());
 
@@ -48,7 +47,6 @@ public class ElectroItemService {
         electroItem.setName(createElectroItemDTO.getName());
         electroItem.setElectroType(electroType);
         electroItem.setPrice(createElectroItemDTO.getPrice());
-        electroItem.setCount(createElectroItemDTO.getCount());
         electroItem.setArchive(false);
         electroItem.setDescription(createElectroItemDTO.getDescription());
 

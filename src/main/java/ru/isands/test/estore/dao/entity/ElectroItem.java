@@ -43,12 +43,6 @@ public class ElectroItem implements Serializable {
     private Long price;
 
     /**
-     * Количество
-     */
-    @Column(name = "count", nullable = false)
-    private int count;
-
-    /**
      * Признак архивности товара
      */
     @Column(name = "archive", nullable = false)

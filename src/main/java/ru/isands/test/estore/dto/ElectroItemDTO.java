@@ -8,7 +8,6 @@ public class ElectroItemDTO {
     private String name;
     private Long electroTypeId;
     private Long price;
-    private int count;
     private boolean archive;
     private String description;
 }

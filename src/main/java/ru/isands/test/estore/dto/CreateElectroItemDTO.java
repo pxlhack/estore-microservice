@@ -7,6 +7,5 @@ public class CreateElectroItemDTO {
     private String name;
     private Long electroTypeId;
     private Long price;
-    private int count;
     private String description;
 }
