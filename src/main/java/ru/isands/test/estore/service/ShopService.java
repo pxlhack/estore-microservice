@@ -6,6 +6,7 @@ import ru.isands.test.estore.dao.entity.Shop;
 import ru.isands.test.estore.dao.repo.ShopRepository;
 import ru.isands.test.estore.dto.CreateShopDTO;
 import ru.isands.test.estore.dto.ShopDTO;
+import ru.isands.test.estore.mapper.ShopMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,19 +20,9 @@ public class ShopService {
         List<Shop> shops = shopRepository.findAll();
 
         return shops.stream()
-                .map(this::convertToDto)
+                .map(ShopMapper::convertToDto)
                 .collect(Collectors.toList());
     }
-
-    private ShopDTO convertToDto(Shop shop) {
-        ShopDTO shopDTO = new ShopDTO();
-        shopDTO.setId(shop.getId());
-        shopDTO.setName(shop.getName());
-        shopDTO.setAddress(shop.getAddress());
-
-        return shopDTO;
-    }
-
 
     public ShopDTO create(CreateShopDTO createShopDTO) {
         Shop shop = new Shop();
@@ -40,7 +31,7 @@ public class ShopService {
 
         shopRepository.save(shop);
 
-        return convertToDto(shop);
+        return ShopMapper.convertToDto(shop);
     }
 
 }
