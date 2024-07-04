@@ -6,6 +6,7 @@ import ru.isands.test.estore.dao.entity.PositionType;
 import ru.isands.test.estore.dao.repo.PositionTypeRepository;
 import ru.isands.test.estore.dto.CreatePositionTypeDTO;
 import ru.isands.test.estore.dto.PositionTypeDTO;
+import ru.isands.test.estore.mapper.PositionTypeMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,18 +20,9 @@ public class PositionTypeService {
         List<PositionType> positionTypes = positionTypeRepository.findAll();
 
         return positionTypes.stream()
-                .map(this::convertToDto)
+                .map(PositionTypeMapper::convertToDto)
                 .collect(Collectors.toList());
     }
-
-    private PositionTypeDTO convertToDto(PositionType positionType) {
-        PositionTypeDTO positionTypeDTO = new PositionTypeDTO();
-        positionTypeDTO.setId(positionType.getId());
-        positionTypeDTO.setName(positionType.getName());
-
-        return positionTypeDTO;
-    }
-
 
     public PositionTypeDTO create(CreatePositionTypeDTO createPositionTypeDTO) {
         PositionType positionType = new PositionType();
@@ -38,6 +30,6 @@ public class PositionTypeService {
 
         positionTypeRepository.save(positionType);
 
-        return convertToDto(positionType);
+        return PositionTypeMapper.convertToDto(positionType);
     }
 }
