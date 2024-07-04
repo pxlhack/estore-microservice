@@ -2,6 +2,7 @@ package ru.isands.test.estore.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.isands.test.estore.dao.entity.Employee;
 import ru.isands.test.estore.dao.entity.PositionType;
 import ru.isands.test.estore.dao.entity.Shop;
@@ -10,6 +11,10 @@ import ru.isands.test.estore.dao.repo.PositionTypeRepository;
 import ru.isands.test.estore.dao.repo.ShopRepository;
 import ru.isands.test.estore.dto.CreateEmployeeDTO;
 import ru.isands.test.estore.dto.EmployeeDTO;
+import ru.isands.test.estore.dto.PositionTypeDTO;
+import ru.isands.test.estore.dto.ShopDTO;
+import ru.isands.test.estore.mapper.PositionTypeMapper;
+import ru.isands.test.estore.mapper.ShopMapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,13 +24,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final PositionTypeRepository positionTypeRepository;
     private final ShopRepository shopRepository;
 
     public List<EmployeeDTO> getAll() {
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeRepository.findAllWithShopAndPositionType();
 
         return employees.stream()
                 .map(this::toDTO)
@@ -43,7 +49,11 @@ public class EmployeeService {
         employeeDTO.setBirthDate(formatter.format(employee.getBirthDate()));
 
         employeeDTO.setPositionTypeId(employee.getPositionType().getId());
-        employeeDTO.setShopId(employee.getShop().getId());
+        ShopDTO shopDTO = ShopMapper.convertToDto(employee.getShop());
+        PositionTypeDTO positionTypeDTO = PositionTypeMapper.convertToDto(employee.getPositionType());
+        employeeDTO.setShop(shopDTO);
+        employeeDTO.setPositionType(positionTypeDTO);
+
         employeeDTO.setGender(employee.isGender());
 
         return employeeDTO;
