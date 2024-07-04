@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.isands.test.estore.dto.CreateEmployeeDTO;
 import ru.isands.test.estore.dto.EmployeeDTO;
 import ru.isands.test.estore.dto.TopEmployeeBySalesCountDTO;
+import ru.isands.test.estore.dto.TopEmployeeBySalesSumDTO;
 import ru.isands.test.estore.service.EmployeeService;
 
 import java.util.List;
@@ -33,11 +34,19 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.create(createEmployeeDTO));
     }
 
-    @GetMapping("/top-by-position-and-sale-count")
+    @GetMapping("/top-by-position/sales-count")
     @Operation(summary = "Вывод информации о лучших сотрудниках в зависимости от занимаемой должности по " +
                          "количеству проданных товаров за последний год")
     public ResponseEntity<List<TopEmployeeBySalesCountDTO>> getTopEmployeesByPositionAndSalesCount() {
         List<TopEmployeeBySalesCountDTO> employees = employeeService.getTopEmployeesByPositionAndSalesCount();
+        return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping("/top-by-position/sales-sum")
+    @Operation(summary = "Вывод информации о лучших сотрудниках в зависимости от занимаемой должности по " +
+                         "сумме проданных товаров за последний год")
+    public ResponseEntity<List<TopEmployeeBySalesSumDTO>> getTopEmployeesByPositionAndSalesSum() {
+        List<TopEmployeeBySalesSumDTO> employees = employeeService.getTopEmployeesByPositionAndSalesSum();
         return ResponseEntity.ok(employees);
     }
 }

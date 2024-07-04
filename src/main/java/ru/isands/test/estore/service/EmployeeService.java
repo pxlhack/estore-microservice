@@ -13,6 +13,7 @@ import ru.isands.test.estore.dto.*;
 import ru.isands.test.estore.mapper.PositionTypeMapper;
 import ru.isands.test.estore.mapper.ShopMapper;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,6 +102,19 @@ public class EmployeeService {
                         (String) result[2],
                         (String) result[3],
                         ((BigInteger) result[4]).longValue()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<TopEmployeeBySalesSumDTO> getTopEmployeesByPositionAndSalesSum() {
+        List<Object[]> results = employeeRepository.findTopEmployeesByPositionAndSalesSum();
+        return results.stream()
+                .map(result -> new TopEmployeeBySalesSumDTO(
+                        (String) result[0],
+                        ((BigInteger) result[1]).longValue(),
+                        (String) result[2],
+                        (String) result[3],
+                        ((BigDecimal) result[4]).longValue()
                 ))
                 .collect(Collectors.toList());
     }
