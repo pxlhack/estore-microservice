@@ -6,6 +6,7 @@ import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.*;
 import ru.isands.test.estore.dto.CreatePurchaseDTO;
 import ru.isands.test.estore.dto.PurchaseDTO;
+import ru.isands.test.estore.mapper.PurchaseMapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,24 +29,8 @@ public class PurchaseService {
         List<Purchase> purchaseTypes = purchaseRepository.findAll();
 
         return purchaseTypes.stream()
-                .map(this::convertToDto)
+                .map(PurchaseMapper::convertToDto)
                 .collect(Collectors.toList());
-    }
-
-    private PurchaseDTO convertToDto(Purchase purchase) {
-        PurchaseDTO dto = new PurchaseDTO();
-
-        dto.setId(purchase.getId());
-        dto.setElectroItemId(purchase.getElectroItem().getId());
-        dto.setEmployeeId(purchase.getEmployee().getId());
-        dto.setShopId(purchase.getShop().getId());
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        dto.setPurchaseDate(formatter.format(purchase.getPurchaseDate()));
-
-        dto.setPurchaseTypeId(purchase.getPurchaseType().getId());
-
-        return dto;
     }
 
 
@@ -86,6 +71,6 @@ public class PurchaseService {
 
         purchaseRepository.save(purchase);
 
-        return convertToDto(purchase);
+        return PurchaseMapper.convertToDto(purchase);
     }
 }
