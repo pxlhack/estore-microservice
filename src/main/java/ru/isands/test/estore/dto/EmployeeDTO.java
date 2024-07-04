@@ -9,7 +9,7 @@ public class EmployeeDTO {
     private String firstName;
     private String patronymic;
     private String birthDate;
-    private Long positionTypeId;
-    private Long shopId;
+    private ShopDTO shop;
+    private PositionTypeDTO positionType;
     private Boolean gender;
 }
