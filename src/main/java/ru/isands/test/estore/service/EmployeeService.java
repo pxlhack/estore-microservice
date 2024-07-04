@@ -9,13 +9,11 @@ import ru.isands.test.estore.dao.entity.Shop;
 import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dao.repo.PositionTypeRepository;
 import ru.isands.test.estore.dao.repo.ShopRepository;
-import ru.isands.test.estore.dto.CreateEmployeeDTO;
-import ru.isands.test.estore.dto.EmployeeDTO;
-import ru.isands.test.estore.dto.PositionTypeDTO;
-import ru.isands.test.estore.dto.ShopDTO;
+import ru.isands.test.estore.dto.*;
 import ru.isands.test.estore.mapper.PositionTypeMapper;
 import ru.isands.test.estore.mapper.ShopMapper;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -92,5 +90,18 @@ public class EmployeeService {
         employee.setShop(shop);
         employee.setGender(createEmployeeDTO.getGender());
         return employee;
+    }
+
+    public List<TopEmployeeBySalesCountDTO> getTopEmployeesByPositionAndSalesCount() {
+        List<Object[]> results = employeeRepository.findTopEmployeesByPositionAndSalesCount();
+        return results.stream()
+                .map(result -> new TopEmployeeBySalesCountDTO(
+                        (String) result[0],
+                        ((BigInteger) result[1]).longValue(),
+                        (String) result[2],
+                        (String) result[3],
+                        ((BigInteger) result[4]).longValue()
+                ))
+                .collect(Collectors.toList());
     }
 }
