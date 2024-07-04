@@ -34,4 +34,7 @@ public class ShopService {
         return ShopMapper.convertToDto(shop);
     }
 
+    public Long getTotalPriceForCashPurchases(Long shopId) {
+        return shopRepository.getTotalPriceByPurchaseTypeAndShopId("Наличные", shopId);
+    }
 }

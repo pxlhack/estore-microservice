@@ -32,4 +32,10 @@ public class ShopController {
     public ResponseEntity<ShopDTO> create(@RequestBody CreateShopDTO createShopDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(shopService.create(createShopDTO));
     }
+
+    @GetMapping("/{id}/sales-sum-for-cash")
+    @Operation(summary = "Вывод суммы денежных средств, полученной магазином через оплату наличными")
+    public ResponseEntity<Long> getTotalPriceForCashPurchases(@PathVariable Long id) {
+        return ResponseEntity.ok(shopService.getTotalPriceForCashPurchases(id));
+    }
 }
