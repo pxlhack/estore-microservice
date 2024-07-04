@@ -48,7 +48,6 @@ public class EmployeeService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         employeeDTO.setBirthDate(formatter.format(employee.getBirthDate()));
 
-        employeeDTO.setPositionTypeId(employee.getPositionType().getId());
         ShopDTO shopDTO = ShopMapper.convertToDto(employee.getShop());
         PositionTypeDTO positionTypeDTO = PositionTypeMapper.convertToDto(employee.getPositionType());
         employeeDTO.setShop(shopDTO);
