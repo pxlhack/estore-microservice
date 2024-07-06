@@ -65,7 +65,7 @@ public class EmployeeService {
                 new NotFoundException("Position type with id = " + positionTypeId + " not found"));
 
         Long shopId = createEmployeeDTO.getShopId();
-        Shop shop = shopRepository.findById(positionTypeId).orElseThrow(() ->
+        Shop shop = shopRepository.findById(shopId).orElseThrow(() ->
                 new NotFoundException("Shop with id = " + shopId + " not found"));
 
         Employee employee = createEmployee(createEmployeeDTO, positionType, shop);
