@@ -12,6 +12,7 @@ import ru.isands.test.estore.mapper.PurchaseMapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class PurchaseService {
     private final ElectroItemRepository electroItemRepository;
     private final EmployeeRepository employeeRepository;
     private final ShopRepository shopRepository;
+    private final ElectroShopRepository electroShopRepository;
 
     public List<PurchaseDTO> getAll() {
         List<Purchase> purchaseTypes = purchaseRepository.findAll();
@@ -36,43 +38,59 @@ public class PurchaseService {
     }
 
 
-    public PurchaseDTO create(CreatePurchaseDTO createPurchaseDTO) {
-        Purchase purchase = new Purchase();
-
+    public List<PurchaseDTO> create(CreatePurchaseDTO createPurchaseDTO) {
         Long electroItemId = createPurchaseDTO.getElectroItemId();
-        ElectroItem electroItem = electroItemRepository.findById(electroItemId)
-                .orElseThrow(() ->
-                        new NotFoundException("Electro item with id = " + electroItemId + " not found"));
-        purchase.setElectroItem(electroItem);
-
         Long shopId = createPurchaseDTO.getShopId();
-        Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() ->
-                        new NotFoundException("Shop with id = " + shopId + " not found"));
-        purchase.setShop(shop);
-
         Long employeeId = createPurchaseDTO.getEmployeeId();
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() ->
-                        new NotFoundException("Employee with id = " + employeeId + " not found"));
-        purchase.setEmployee(employee);
-
         Long purchaseTypeId = createPurchaseDTO.getPurchaseTypeId();
-        PurchaseType purchaseType = purchaseTypeRepository.findById(purchaseTypeId)
-                .orElseThrow(() ->
-                        new NotFoundException("Purchase type with id = " + purchaseTypeId + " not found"));
-        purchase.setPurchaseType(purchaseType);
+        int count = createPurchaseDTO.getCount();
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        ElectroItem electroItem = electroItemRepository.findById(electroItemId)
+                .orElseThrow(() -> new NotFoundException("Electro item with id = " + electroItemId + " not found"));
+
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new NotFoundException("Shop with id = " + shopId + " not found"));
+
+        ElectroShop electroShop = electroShopRepository.findByElectroItemIdAndShopId(electroItemId, shopId)
+                .orElseThrow(() -> new BadRequestException("Electro item not found in this shop"));
+
+        if (electroShop.getCount() < count) {
+            throw new BadRequestException("There are not so many electro items in the shop");
+        }
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee with id = " + employeeId + " not found"));
+
+        PurchaseType purchaseType = purchaseTypeRepository.findById(purchaseTypeId)
+                .orElseThrow(() -> new NotFoundException("Purchase type with id = " + purchaseTypeId + " not found"));
+
+        Date purchaseDate;
         try {
-            Date date = formatter.parse(createPurchaseDTO.getPurchaseDate());
-            purchase.setPurchaseDate(date);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            purchaseDate = formatter.parse(createPurchaseDTO.getPurchaseDate());
         } catch (ParseException e) {
             throw new BadRequestException("Invalid date format, expected yyyy-MM-dd");
         }
 
-        purchaseRepository.save(purchase);
+        List<Purchase> purchases = new ArrayList<>();
 
-        return PurchaseMapper.convertToDto(purchase);
+        for (int i = 0; i < count; i++) {
+            Purchase purchase = new Purchase();
+            purchase.setElectroItem(electroItem);
+            purchase.setShop(shop);
+            purchase.setEmployee(employee);
+            purchase.setPurchaseType(purchaseType);
+            purchase.setPurchaseDate(purchaseDate);
+            purchases.add(purchase);
+        }
+
+        List<Purchase> savedPurchases = purchaseRepository.saveAll(purchases);
+
+        electroShop.setCount(electroShop.getCount() - count);
+        electroShopRepository.save(electroShop);
+
+        return savedPurchases.stream()
+                .map(PurchaseMapper::convertToDto)
+                .collect(Collectors.toList());
     }
 }

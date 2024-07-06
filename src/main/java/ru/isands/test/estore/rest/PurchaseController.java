@@ -28,7 +28,7 @@ public class PurchaseController {
 
     @PostMapping
     @Operation(summary = "Создание покупки")
-    public ResponseEntity<PurchaseDTO> create(@RequestBody CreatePurchaseDTO dto) {
+    public ResponseEntity<List<PurchaseDTO>> create(@RequestBody CreatePurchaseDTO dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(purchaseService.create(dto));

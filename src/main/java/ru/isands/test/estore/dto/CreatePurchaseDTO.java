@@ -9,4 +9,5 @@ public class CreatePurchaseDTO {
     private Long shopId;
     private String purchaseDate;
     private Long purchaseTypeId;
+    private int count;
 }
