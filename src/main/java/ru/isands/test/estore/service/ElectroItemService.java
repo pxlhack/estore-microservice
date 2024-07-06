@@ -9,6 +9,7 @@ import ru.isands.test.estore.dao.repo.ElectroTypeRepository;
 import ru.isands.test.estore.dto.CreateElectroItemDTO;
 import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.exception.NotFoundException;
+import ru.isands.test.estore.mapper.ElectroItemMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,20 +24,8 @@ public class ElectroItemService {
         List<ElectroItem> electroItems = electroItemRepository.findAll();
 
         return electroItems.stream()
-                .map(this::convertToDto)
+                .map(ElectroItemMapper::convertToDto)
                 .collect(Collectors.toList());
-    }
-
-    public ElectroItemDTO convertToDto(ElectroItem electroItem) {
-        ElectroItemDTO electroItemDTO = new ElectroItemDTO();
-        electroItemDTO.setId(electroItem.getId());
-        electroItemDTO.setName(electroItem.getName());
-        electroItemDTO.setElectroTypeId(electroItem.getElectroType().getId());
-        electroItemDTO.setPrice(electroItem.getPrice());
-        electroItemDTO.setArchive(electroItem.isArchive());
-        electroItemDTO.setDescription(electroItem.getDescription());
-
-        return electroItemDTO;
     }
 
     public ElectroItemDTO create(CreateElectroItemDTO createElectroItemDTO) {
@@ -53,7 +42,7 @@ public class ElectroItemService {
 
         electroItemRepository.save(electroItem);
 
-        return convertToDto(electroItem);
+        return ElectroItemMapper.convertToDto(electroItem);
     }
 
 }
