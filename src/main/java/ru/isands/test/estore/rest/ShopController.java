@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isands.test.estore.dto.CreateShopDTO;
+import ru.isands.test.estore.dto.EmployeeDTO;
 import ru.isands.test.estore.dto.ShopDTO;
+import ru.isands.test.estore.service.EmployeeService;
 import ru.isands.test.estore.service.ShopService;
 
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
 public class ShopController {
 
     private final ShopService shopService;
-
+    private final EmployeeService employeeService;
 
     @GetMapping
     @Operation(summary = "Получение списка магазинов")
@@ -47,5 +49,12 @@ public class ShopController {
     @Operation(summary = "Вывод суммы денежных средств, полученной магазином через оплату наличными")
     public ResponseEntity<Long> getTotalPriceForCashPurchases(@PathVariable Long id) {
         return ResponseEntity.ok(shopService.getTotalPriceForCashPurchases(id));
+    }
+
+
+    @GetMapping("/{id}/employee")
+    @Operation(summary = "Получение списка сотрудников магазина")
+    public ResponseEntity<List<EmployeeDTO>> getEmployees(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getByShopId(id));
     }
 }

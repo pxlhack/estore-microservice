@@ -120,4 +120,15 @@ public class EmployeeService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public List<EmployeeDTO> getByShopId(Long shopId) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow(() ->
+                new NotFoundException("Shop with id = " + shopId + " not found"));
+
+        List<Employee> employees = employeeRepository.findByShop(shop);
+
+        return employees.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
 }
