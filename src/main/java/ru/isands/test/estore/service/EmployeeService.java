@@ -10,6 +10,7 @@ import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dao.repo.PositionTypeRepository;
 import ru.isands.test.estore.dao.repo.ShopRepository;
 import ru.isands.test.estore.dto.*;
+import ru.isands.test.estore.exception.NotFoundException;
 import ru.isands.test.estore.mapper.PositionTypeMapper;
 import ru.isands.test.estore.mapper.ShopMapper;
 
@@ -60,11 +61,11 @@ public class EmployeeService {
     public EmployeeDTO create(CreateEmployeeDTO createEmployeeDTO) {
         Long positionTypeId = createEmployeeDTO.getPositionTypeId();
         PositionType positionType = positionTypeRepository.findById(positionTypeId).orElseThrow(() ->
-                new RuntimeException("Position type with id = " + positionTypeId + " found"));
+                new NotFoundException("Position type with id = " + positionTypeId + " not found"));
 
         Long shopId = createEmployeeDTO.getShopId();
         Shop shop = shopRepository.findById(positionTypeId).orElseThrow(() ->
-                new RuntimeException("Shop with id = " + shopId + " found"));
+                new NotFoundException("Shop with id = " + shopId + " not found"));
 
         Employee employee = createEmployee(createEmployeeDTO, positionType, shop);
 
