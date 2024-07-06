@@ -33,6 +33,16 @@ public class ShopController {
         return ResponseEntity.status(HttpStatus.CREATED).body(shopService.create(createShopDTO));
     }
 
+    @PostMapping("/{id}/electro-item")
+    @Operation(summary = "Добавление товара в магазин")
+    public ResponseEntity<String> addElectroItem(@PathVariable Long id,
+                                                 @RequestParam("electroItemId") Long electroItemId,
+                                                 @RequestParam("count") int count) {
+
+        String response = shopService.addElectroItem(id, electroItemId, count);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}/sales-sum-for-cash")
     @Operation(summary = "Вывод суммы денежных средств, полученной магазином через оплату наличными")
     public ResponseEntity<Long> getTotalPriceForCashPurchases(@PathVariable Long id) {
