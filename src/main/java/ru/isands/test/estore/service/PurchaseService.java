@@ -6,6 +6,7 @@ import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.*;
 import ru.isands.test.estore.dto.CreatePurchaseDTO;
 import ru.isands.test.estore.dto.PurchaseDTO;
+import ru.isands.test.estore.exception.BadRequestException;
 import ru.isands.test.estore.exception.NotFoundException;
 import ru.isands.test.estore.mapper.PurchaseMapper;
 
@@ -67,7 +68,7 @@ public class PurchaseService {
             Date date = formatter.parse(createPurchaseDTO.getPurchaseDate());
             purchase.setPurchaseDate(date);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new BadRequestException("Invalid date format, expected yyyy-MM-dd");
         }
 
         purchaseRepository.save(purchase);
