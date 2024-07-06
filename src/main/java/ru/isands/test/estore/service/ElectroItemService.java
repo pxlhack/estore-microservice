@@ -8,6 +8,7 @@ import ru.isands.test.estore.dao.repo.ElectroItemRepository;
 import ru.isands.test.estore.dao.repo.ElectroTypeRepository;
 import ru.isands.test.estore.dto.CreateElectroItemDTO;
 import ru.isands.test.estore.dto.ElectroItemDTO;
+import ru.isands.test.estore.exception.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class ElectroItemService {
     public ElectroItemDTO create(CreateElectroItemDTO createElectroItemDTO) {
         Long electroTypeId = createElectroItemDTO.getElectroTypeId();
         ElectroType electroType = electroTypeRepository.findById(electroTypeId).orElseThrow(() ->
-                new RuntimeException("ElectroType with id = " + electroTypeId + " Not found"));
+                new NotFoundException("ElectroType with id = " + electroTypeId + " not found"));
 
         ElectroItem electroItem = new ElectroItem();
         electroItem.setName(createElectroItemDTO.getName());
