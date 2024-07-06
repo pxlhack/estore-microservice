@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.stereotype.Repository;
 import ru.isands.test.estore.dao.entity.Employee;
+import ru.isands.test.estore.dao.entity.Shop;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
@@ -63,5 +64,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 			"    pt.name, sales_sum DESC",
 			nativeQuery = true)
 	List<Object[]> findTopEmployeesByPositionAndSalesSum();
-	
+
+	List<Employee> findByShop(Shop shop);
 }
