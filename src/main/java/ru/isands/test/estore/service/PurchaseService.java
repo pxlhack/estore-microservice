@@ -6,6 +6,7 @@ import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.*;
 import ru.isands.test.estore.dto.CreatePurchaseDTO;
 import ru.isands.test.estore.dto.PurchaseDTO;
+import ru.isands.test.estore.exception.NotFoundException;
 import ru.isands.test.estore.mapper.PurchaseMapper;
 
 import java.text.ParseException;
@@ -40,25 +41,25 @@ public class PurchaseService {
         Long electroItemId = createPurchaseDTO.getElectroItemId();
         ElectroItem electroItem = electroItemRepository.findById(electroItemId)
                 .orElseThrow(() ->
-                        new RuntimeException("Electro item with id = " + electroItemId + " not found"));
+                        new NotFoundException("Electro item with id = " + electroItemId + " not found"));
         purchase.setElectroItem(electroItem);
 
         Long shopId = createPurchaseDTO.getShopId();
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(() ->
-                        new RuntimeException("Shop with id = " + shopId + " not found"));
+                        new NotFoundException("Shop with id = " + shopId + " not found"));
         purchase.setShop(shop);
 
         Long employeeId = createPurchaseDTO.getEmployeeId();
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() ->
-                        new RuntimeException("Employee with id = " + employeeId + " not found"));
+                        new NotFoundException("Employee with id = " + employeeId + " not found"));
         purchase.setEmployee(employee);
 
         Long purchaseTypeId = createPurchaseDTO.getPurchaseTypeId();
         PurchaseType purchaseType = purchaseTypeRepository.findById(purchaseTypeId)
                 .orElseThrow(() ->
-                        new RuntimeException("Purchase type with id = " + purchaseTypeId + " not found"));
+                        new NotFoundException("Purchase type with id = " + purchaseTypeId + " not found"));
         purchase.setPurchaseType(purchaseType);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
