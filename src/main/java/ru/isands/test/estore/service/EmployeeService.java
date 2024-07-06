@@ -10,6 +10,7 @@ import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dao.repo.PositionTypeRepository;
 import ru.isands.test.estore.dao.repo.ShopRepository;
 import ru.isands.test.estore.dto.*;
+import ru.isands.test.estore.exception.BadRequestException;
 import ru.isands.test.estore.exception.NotFoundException;
 import ru.isands.test.estore.mapper.PositionTypeMapper;
 import ru.isands.test.estore.mapper.ShopMapper;
@@ -85,7 +86,7 @@ public class EmployeeService {
             Date date = formatter.parse(createEmployeeDTO.getBirthDate());
             employee.setBirthDate(date);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new BadRequestException("Invalid date format, expected yyyy-MM-dd");
         }
 
         employee.setPositionType(positionType);
