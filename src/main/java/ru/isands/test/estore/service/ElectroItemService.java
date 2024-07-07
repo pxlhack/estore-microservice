@@ -1,6 +1,10 @@
 package ru.isands.test.estore.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.ElectroItem;
 import ru.isands.test.estore.dao.entity.ElectroType;
@@ -21,11 +25,31 @@ public class ElectroItemService {
     private final ElectroTypeRepository electroTypeRepository;
 
     public List<ElectroItemDTO> getAll() {
-        List<ElectroItem> electroItems = electroItemRepository.findAll();
+        Pageable allPageable = Pageable.unpaged();
+        Page<ElectroItem> allItemsPage = electroItemRepository.findAll(allPageable);
+        List<ElectroItem> electroItems = allItemsPage.getContent();
 
         return electroItems.stream()
                 .map(ElectroItemMapper::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+
+    public Page<ElectroItemDTO> getElectroItemsPerPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ElectroItem> items = electroItemRepository.findAll(pageable);
+
+        return convertToDto(items);
+    }
+
+    private Page<ElectroItemDTO> convertToDto(Page<ElectroItem> entityPage) {
+        List<ElectroItemDTO> dtoList = entityPage
+                .getContent()
+                .stream()
+                .map(ElectroItemMapper::convertToDto)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtoList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 
     public ElectroItemDTO create(CreateElectroItemDTO createElectroItemDTO) {
