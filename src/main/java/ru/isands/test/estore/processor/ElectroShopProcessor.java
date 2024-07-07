@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.isands.test.estore.dao.entity.ElectroItem;
 import ru.isands.test.estore.dao.entity.ElectroShop;
-import ru.isands.test.estore.dao.entity.ElectroType;
 import ru.isands.test.estore.dao.entity.Shop;
 import ru.isands.test.estore.dao.repo.ElectroShopRepository;
 
@@ -35,9 +34,9 @@ public class ElectroShopProcessor implements FileProcessor {
             String[] row = rows.get(i);
             System.out.println(row.length + " " +  Arrays.toString(row));
 
-            ElectroShop electroItem = convertToElectroShop(row);
+            ElectroShop electroShop = convertToElectroShop(row);
 
-            electroShops.add(electroItem);
+            electroShops.add(electroShop);
         }
 
         electroShopRepository.saveAll(electroShops);
