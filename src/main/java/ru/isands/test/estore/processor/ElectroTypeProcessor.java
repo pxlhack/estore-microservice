@@ -22,7 +22,7 @@ public class ElectroTypeProcessor implements FileProcessor {
 
     @Override
     public boolean canProcess(String fileName) {
-        return isCsvFile(fileName) && fileName.contains("ElectroType");
+        return isCsvFile(fileName) && fileName.equals("ElectroType.csv");
     }
 
     private void processRows(List<String[]> rows) {
