@@ -33,27 +33,32 @@ public class ElectroItemProcessor implements FileProcessor {
             String[] row = rows.get(i);
             System.out.println(row.length + " " +  Arrays.toString(row));
 
-            String name = row[1];
-            Long electroTypeId = Long.valueOf(row[2]);
-            Long price = Long.valueOf(row[3]);
-            boolean archive = row[5].equals("1");
-            String description = row[6];
-
-            ElectroItem electroItem = new ElectroItem();
-
-            electroItem.setName(name);
-
-            ElectroType electroType = new ElectroType();
-            electroType.setId(electroTypeId);
-            electroItem.setElectroType(electroType);
-
-            electroItem.setPrice(price);
-            electroItem.setArchive(archive);
-            electroItem.setDescription(description);
+            ElectroItem electroItem = convertToElectroItem(row);
 
             electroItems.add(electroItem);
         }
 
         electroItemRepository.saveAll(electroItems);
+    }
+
+    private static ElectroItem convertToElectroItem(String[] row) {
+        String name = row[1];
+        Long electroTypeId = Long.parseLong(row[2]);
+        Long price = Long.parseLong(row[3]);
+        boolean archive = row[5].equals("1");
+        String description = row[6];
+
+        ElectroItem electroItem = new ElectroItem();
+
+        electroItem.setName(name);
+
+        ElectroType electroType = new ElectroType();
+        electroType.setId(electroTypeId);
+        electroItem.setElectroType(electroType);
+
+        electroItem.setPrice(price);
+        electroItem.setArchive(archive);
+        electroItem.setDescription(description);
+        return electroItem;
     }
 }
