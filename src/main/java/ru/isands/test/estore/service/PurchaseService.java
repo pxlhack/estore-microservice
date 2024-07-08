@@ -66,10 +66,10 @@ public class PurchaseService {
 
         Date purchaseDate;
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             purchaseDate = formatter.parse(createPurchaseDTO.getPurchaseDate());
         } catch (ParseException e) {
-            throw new BadRequestException("Invalid date format, expected yyyy-MM-dd");
+            throw new BadRequestException("Invalid date format, expected dd.MM.yyyy HH:mm");
         }
 
         List<Purchase> purchases = new ArrayList<>();

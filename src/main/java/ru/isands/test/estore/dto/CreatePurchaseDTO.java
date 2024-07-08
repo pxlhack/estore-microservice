@@ -23,7 +23,8 @@ public class CreatePurchaseDTO {
     private Long shopId;
 
     @NotNull(message = "Дата покупки не может быть пустой")
-    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Дата должна быть в формате yyyy-MM-dd")
+    @Pattern(regexp = "^\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}$",
+            message = "Дата должна быть в формате dd.MM.yyyy HH:mm")
     private String purchaseDate;
 
     @NotNull(message = "ID типа покупки не может быть пустым")
