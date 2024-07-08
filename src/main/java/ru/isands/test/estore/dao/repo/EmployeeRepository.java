@@ -1,69 +1,52 @@
 package ru.isands.test.estore.dao.repo;
 
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import org.springframework.stereotype.Repository;
 import ru.isands.test.estore.dao.entity.Employee;
 import ru.isands.test.estore.dao.entity.Shop;
 
+import java.util.List;
+
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-	
-	@Query("select e from Employee e where e.lastName = ?1 and e.firstName = ?2 and e.patronymic = ?3 and e.birthDate = ?4")
-	public Employee findFullName(String lastName, String firstName, String patronymic, Date birthDate);
-	
-	List<Employee> findByPositionTypeId(Long positionId);
 
-	@Query("SELECT e FROM Employee e " +
-		   "JOIN FETCH e.shop " +
-		   "JOIN FETCH e.positionType")
-	List<Employee> findAllWithShopAndPositionType();
+    @Query("SELECT e FROM Employee e " +
+           "JOIN FETCH e.shop " +
+           "JOIN FETCH e.positionType")
+    List<Employee> findAllWithShopAndPositionType();
 
-	@Query(value =
-			"SELECT " +
-			"    pt.name as position, " +
-			"    e.id as employee_id, " +
-			"    e.lastname, " +
-			"    e.firstname, " +
-			"    COUNT(p.id) as sales_count " +
-			"FROM " +
-			"    store_purchase p " +
-			"    JOIN public.store_employee e ON p.employee_id = e.id " +
-			"    JOIN public.position_type pt ON pt.id = e.position_id " +
-			"    JOIN public.electro_item ei ON p.electro_item_id = ei.id " +
-			"WHERE " +
-			"    p.purchase_date >= CURRENT_DATE - interval '1 year' " +
-			"GROUP BY " +
-			"    pt.id, e.id " +
-			"ORDER BY " +
-			"    pt.name, sales_count DESC",
-			nativeQuery = true)
-	List<Object[]> findTopEmployeesByPositionAndSalesCount();
+    @Query(value =
+            "SELECT DISTINCT pt.name                                                           as position, " +
+            "   FIRST_VALUE(e.id) OVER (PARTITION BY pt.name ORDER BY COUNT(p.id) DESC)        as employee_id, " +
+            "   FIRST_VALUE(e.lastname) OVER (PARTITION BY pt.name ORDER BY COUNT(p.id) DESC)  as lastname, " +
+            "   FIRST_VALUE(e.firstname) OVER (PARTITION BY pt.name ORDER BY COUNT(p.id) DESC) as firstname, " +
+            "   FIRST_VALUE(COUNT(p.id)) OVER (PARTITION BY pt.name ORDER BY COUNT(p.id) DESC) as sales_count " +
+            "FROM store_purchase p " +
+            "   JOIN store_employee e ON p.employee_id = e.id " +
+            "   JOIN position_type pt ON pt.id = e.position_id " +
+            "WHERE p.purchase_date >= CURRENT_DATE - interval '1 year' " +
+            "GROUP BY position, e.id, e.lastname, e.firstname " +
+            "ORDER BY position;",
+            nativeQuery = true)
+    List<Object[]> findTopEmployeesByPositionAndSalesCount();
 
-	@Query(value =
-			"SELECT " +
-			"    pt.name as position, " +
-			"    e.id as employee_id, " +
-			"    e.lastname, " +
-			"    e.firstname, " +
-			"    SUM(ei.price) as sales_sum " +
-			"FROM " +
-			"    store_purchase p " +
-			"    JOIN public.store_employee e ON p.employee_id = e.id " +
-			"    JOIN public.position_type pt ON pt.id = e.position_id " +
-			"    JOIN public.electro_item ei ON p.electro_item_id = ei.id " +
-			"WHERE " +
-			"    p.purchase_date >= CURRENT_DATE - interval '1 year' " +
-			"GROUP BY " +
-			"    pt.id, e.id " +
-			"ORDER BY " +
-			"    pt.name, sales_sum DESC",
-			nativeQuery = true)
-	List<Object[]> findTopEmployeesByPositionAndSalesSum();
+    @Query(value =
+            "SELECT DISTINCT pt.name                                                               as position, " +
+            "   FIRST_VALUE(e.id) OVER (PARTITION BY pt.name ORDER BY SUM(ei.price) DESC)          as employee_id, " +
+            "   FIRST_VALUE(e.lastname) OVER (PARTITION BY pt.name ORDER BY SUM(ei.price) DESC)    as lastname, " +
+            "   FIRST_VALUE(e.firstname) OVER (PARTITION BY pt.name ORDER BY SUM(ei.price) DESC)   as firstname, " +
+            "   FIRST_VALUE(SUM(ei.price)) OVER (PARTITION BY pt.name ORDER BY SUM(ei.price) DESC) as sales_sum " +
+            "FROM store_purchase p " +
+            "   JOIN store_employee e ON p.employee_id = e.id " +
+            "   JOIN position_type pt ON pt.id = e.position_id " +
+            "   JOIN electro_item ei ON p.electro_item_id = ei.id " +
+            "WHERE p.purchase_date >= CURRENT_DATE - interval '1 year' " +
+            "GROUP BY position, e.id, e.lastname, e.firstname " +
+            "ORDER BY position;",
+            nativeQuery = true)
+    List<Object[]> findTopEmployeesByPositionAndSalesSum();
 
-	List<Employee> findByShop(Shop shop);
+
+    List<Employee> findByShop(Shop shop);
 }
