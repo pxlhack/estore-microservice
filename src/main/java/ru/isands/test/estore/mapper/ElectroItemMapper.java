@@ -13,6 +13,8 @@ public class ElectroItemMapper {
         electroItemDTO.setArchive(electroItem.isArchive());
         electroItemDTO.setDescription(electroItem.getDescription());
 
+        electroItemDTO.setElectroType(ElectroTypeMapper.convertToDto(electroItem.getElectroType()));
+
         return electroItemDTO;
     }
 
