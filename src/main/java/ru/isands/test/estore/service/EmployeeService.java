@@ -131,4 +131,9 @@ public class EmployeeService {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public TopEmployeeProjection getTopEmployee(String positionName, String electroTypeName) {
+        return employeeRepository.findTopEmployeeByPositionAndElectroType(positionName, electroTypeName)
+                .orElseThrow(() -> new NotFoundException("No employee found"));
+    }
 }
