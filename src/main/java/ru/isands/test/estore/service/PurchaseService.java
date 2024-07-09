@@ -1,13 +1,17 @@
 package ru.isands.test.estore.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.*;
 import ru.isands.test.estore.dto.CreatePurchaseDTO;
+import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.PurchaseDTO;
 import ru.isands.test.estore.exception.BadRequestException;
 import ru.isands.test.estore.exception.NotFoundException;
+import ru.isands.test.estore.mapper.ElectroItemMapper;
 import ru.isands.test.estore.mapper.PurchaseMapper;
 
 import java.text.ParseException;
@@ -30,9 +34,11 @@ public class PurchaseService {
     private final ElectroShopRepository electroShopRepository;
 
     public List<PurchaseDTO> getAll() {
-        List<Purchase> purchaseTypes = purchaseRepository.findAll();
+        Pageable allPageable = Pageable.unpaged();
+        Page<Purchase> purchasePage = purchaseRepository.findAll(allPageable);
+        List<Purchase> purchases = purchasePage.getContent();
 
-        return purchaseTypes.stream()
+        return purchases.stream()
                 .map(PurchaseMapper::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -84,7 +90,7 @@ public class PurchaseService {
             purchases.add(purchase);
         }
 
-        List<Purchase> savedPurchases = purchaseRepository.saveAll(purchases);
+        List<Purchase> savedPurchases = (List<Purchase>) purchaseRepository.saveAll(purchases);
 
         electroShop.setCount(electroShop.getCount() - count);
         electroShopRepository.save(electroShop);
