@@ -2,6 +2,8 @@ package ru.isands.test.estore.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
@@ -98,5 +100,22 @@ public class PurchaseService {
         return savedPurchases.stream()
                 .map(PurchaseMapper::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    public Page<PurchaseDTO> getPurchasesPerPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Purchase> purchases = purchaseRepository.findAll(pageable);
+
+        return convertToDto(purchases);
+    }
+
+    private Page<PurchaseDTO> convertToDto(Page<Purchase> entityPage) {
+        List<PurchaseDTO> dtoList = entityPage
+                .getContent()
+                .stream()
+                .map(PurchaseMapper::convertToDto)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtoList, entityPage.getPageable(), entityPage.getTotalElements());
     }
 }
