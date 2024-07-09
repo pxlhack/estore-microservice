@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.isands.test.estore.dto.CreateEmployeeDTO;
-import ru.isands.test.estore.dto.EmployeeDTO;
-import ru.isands.test.estore.dto.TopEmployeeBySalesCountDTO;
-import ru.isands.test.estore.dto.TopEmployeeBySalesSumDTO;
+import ru.isands.test.estore.dto.*;
 import ru.isands.test.estore.service.EmployeeService;
 
 import java.util.List;
@@ -48,5 +45,12 @@ public class EmployeeController {
     public ResponseEntity<List<TopEmployeeBySalesSumDTO>> getTopEmployeesByPositionAndSalesSum() {
         List<TopEmployeeBySalesSumDTO> employees = employeeService.getTopEmployeesByPositionAndSalesSum();
         return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping("/top")
+    public TopEmployeeProjection getTopEmployee(
+            @RequestParam("positionName") String positionName,
+            @RequestParam("electroTypeName") String electroTypeName) {
+        return employeeService.getTopEmployee(positionName, electroTypeName);
     }
 }
