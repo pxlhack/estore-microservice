@@ -41,6 +41,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/page")
+    @Operation(summary = "Постраничный список покупок")
     public ResponseEntity<Map<String, Object>> getPurchasesPerPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -57,6 +58,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/page/sort")
+    @Operation(summary = "Постраничный список покупок, сортировка по дате")
     public ResponseEntity<Map<String, Object>> getPurchasesPerPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

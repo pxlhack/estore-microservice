@@ -38,7 +38,9 @@ public class ElectroItemController {
     }
 
 
+
     @GetMapping("/page")
+    @Operation(summary = "Постраничный список товаров")
     public ResponseEntity<Map<String, Object>> getElectroItemsPerPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {

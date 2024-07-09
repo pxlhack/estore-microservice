@@ -48,6 +48,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/top")
+    @Operation(summary = "Вывод информацию о лучшем сотруднике на основе указанной должности и типа электротовара")
     public TopEmployeeProjection getTopEmployee(
             @RequestParam("positionName") String positionName,
             @RequestParam("electroTypeName") String electroTypeName) {

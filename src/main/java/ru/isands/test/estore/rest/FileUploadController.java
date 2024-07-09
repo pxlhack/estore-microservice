@@ -1,5 +1,6 @@
 package ru.isands.test.estore.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,8 @@ public class FileUploadController {
 
     private final FileProcessingService fileProcessingService;
 
-
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Загрузка zip-файла")
     public ResponseEntity<UploadResult> uploadZipFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body(new UploadResult(false, "Пожалуйста, выберите файл для загрузки."));
