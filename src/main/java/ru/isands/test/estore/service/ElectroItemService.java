@@ -26,7 +26,7 @@ public class ElectroItemService {
 
     public List<ElectroItemDTO> getAll() {
         Pageable allPageable = Pageable.unpaged();
-        Page<ElectroItem> allItemsPage = electroItemRepository.findAll(allPageable);
+        Page<ElectroItem> allItemsPage = electroItemRepository.findWithElectroType(allPageable);
         List<ElectroItem> electroItems = allItemsPage.getContent();
 
         return electroItems.stream()
@@ -37,7 +37,7 @@ public class ElectroItemService {
 
     public Page<ElectroItemDTO> getElectroItemsPerPage(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ElectroItem> items = electroItemRepository.findAll(pageable);
+        Page<ElectroItem> items = electroItemRepository.findWithElectroType(pageable);
 
         return convertToDto(items);
     }
