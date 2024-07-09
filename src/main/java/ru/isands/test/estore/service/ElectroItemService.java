@@ -25,9 +25,7 @@ public class ElectroItemService {
     private final ElectroTypeRepository electroTypeRepository;
 
     public List<ElectroItemDTO> getAll() {
-        Pageable allPageable = Pageable.unpaged();
-        Page<ElectroItem> allItemsPage = electroItemRepository.findWithElectroType(allPageable);
-        List<ElectroItem> electroItems = allItemsPage.getContent();
+        List<ElectroItem> electroItems = electroItemRepository.findAllWithElectroType();
 
         return electroItems.stream()
                 .map(ElectroItemMapper::convertToDto)
