@@ -24,7 +24,7 @@ public class Purchase implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    Long id;
+    private Long id;
 
     /**
      * Идентификатор товара

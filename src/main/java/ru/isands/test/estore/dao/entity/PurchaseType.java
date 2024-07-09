@@ -17,7 +17,7 @@ public class PurchaseType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    Long id;
+    private Long id;
 
     /**
      * Наименование типа покупки
