@@ -1,19 +1,14 @@
 package ru.isands.test.estore.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.*;
 import ru.isands.test.estore.dto.CreatePurchaseDTO;
-import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.PurchaseDTO;
 import ru.isands.test.estore.exception.BadRequestException;
 import ru.isands.test.estore.exception.NotFoundException;
-import ru.isands.test.estore.mapper.ElectroItemMapper;
 import ru.isands.test.estore.mapper.PurchaseMapper;
 
 import java.text.ParseException;
@@ -117,5 +112,14 @@ public class PurchaseService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(dtoList, entityPage.getPageable(), entityPage.getTotalElements());
+    }
+
+    public Page<PurchaseDTO> getPurchasesSorted(int page, int size, boolean ascending) {
+        Sort sort = ascending ? Sort.by("purchaseDate").ascending() : Sort.by("purchaseDate").descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Purchase> purchases = purchaseRepository.findAll(pageable);
+
+        return convertToDto(purchases);
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.isands.test.estore.dto.CreatePurchaseDTO;
-import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.PurchaseDTO;
 import ru.isands.test.estore.service.PurchaseService;
 
@@ -56,4 +55,22 @@ public class PurchaseController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/page/sort")
+    public ResponseEntity<Map<String, Object>> getPurchasesPerPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam boolean ascending) {
+
+        Page<PurchaseDTO> pageElectroItems = purchaseService.getPurchasesSorted(page, size, ascending);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("items", pageElectroItems.getContent());
+        response.put("currentPage", pageElectroItems.getNumber());
+        response.put("totalItems", pageElectroItems.getTotalElements());
+        response.put("totalPages", pageElectroItems.getTotalPages());
+
+        return ResponseEntity.ok(response);
+    }
+
 }
